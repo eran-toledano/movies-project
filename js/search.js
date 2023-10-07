@@ -1,29 +1,56 @@
 
-const options = {
+function populateMovieImages(data) {
+  for (let i = 0; i < 20; i++) {
+    document.getElementById(`movieImg${i}`).innerHTML = `<img src="https://image.tmdb.org/t/p/w500/${data.results[i].poster_path}" alt="">`;
+  }
+}
+
+// Add an event listener to the search button
+const button = document.getElementById('btn');
+button.addEventListener('click', () => {
+  const search = document.getElementById('inputId').value;
+  searchMovie(search);
+});
+
+
+function searchMovie(search) {
+  const options = {
     method: 'GET',
     headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NzQyZDgyNzA0Yjk0OGJhYTJmNTJhODQxNzc0ZTAzYSIsInN1YiI6IjY1MTU4ZDEwZWE4NGM3MDBlYjk4MmU3ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aK0FvH8FQIsCm0zotTPNQ9oQnghE4IEdlhPt6j3v09w'
-    }
+    accept: 'application/json',
+     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4NzQyZDgyNzA0Yjk0OGJhYTJmNTJhODQxNzc0ZTAzYSIsInN1YiI6IjY1MTU4ZDEwZWE4NGM3MDBlYjk4MmU3ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aK0FvH8FQIsCm0zotTPNQ9oQnghE4IEdlhPt6j3v09w'
+}
   };
-  
-  fetch('https://api.themoviedb.org/3/search/movie?query=spiderman&include_adult=false&language=en-US&page=1', options)
+
+  fetch(`https://api.themoviedb.org/3/search/movie?query=${search}&include_adult=false&language=en-US&page=1`, options)
     .then(response => response.json())
     .then(response => {
-        console.log(response)
-       for (let i = 0; i < 20; i++) {
-        document.getElementsByClassName('movieImg')[i].innerHTML = `<img src="https://image.tmdb.org/t/p/w500/${response.results[i].poster_path}" alt="">`
-       }
-
+      console.log(response);
+      populateMovieImages(response);
     })
     .catch(err => console.error(err));
+}
 
 
-function getMovie() {
-   fetch('https://api.themoviedb.org/3/search/movie?api_key=8742d82704b948baa2f52a841774e03a&query=spiderman&include_adult=false&language=en-US&page=1')
-   .then(res=>resizeBy.json())
-   .then(data=>{
-    document.getElementsByClassName('movieImg').innerHTML=`<img src="${results.backdrop_path}" alt="">
-    `
-   }) 
+
+
+
+// Define a function to populate the movie images
+function populateMovieImages(data) {
+  const container = document.getElementById('container');
+
+  // Clear any existing content in the container
+
+  for (let i = 0; i < 20; i++) {
+    const movieDiv = document.createElement('div');
+    movieDiv.innerHTML = `
+      <div class="movieImg" id="movieImg${i}">
+        <img src="https://image.tmdb.org/t/p/w500/${data.results[i].poster_path}" alt="">
+      </div>
+      <p>Title: ${data.results[i].title}</p>
+      <p>Year: ${data.results[i].release_date}</p>
+    `;
+    
+    container.appendChild(movieDiv);
+  }
 }
